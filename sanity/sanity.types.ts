@@ -13,6 +13,134 @@
  */
 
 // Source: schema.json
+export type BlogPost = {
+  _id: string;
+  _type: "blogPost";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  publishedAt?: string;
+  excerpt?: string;
+  content?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+        _key: string;
+      }
+  >;
+  author?: string;
+};
+
+export type AboutPage = {
+  _id: string;
+  _type: "aboutPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  headline?: string;
+  aboutPhoto?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    altText?: string;
+    _type: "image";
+  };
+  content?: string;
+  rulesForBuilding?: Array<{
+    title?: string;
+    description?: string;
+    icon?: IconPicker;
+    enabled?: boolean;
+    _type: "rule";
+    _key: string;
+  }>;
+};
+
+export type SiteSettings = {
+  _id: string;
+  _type: "siteSettings";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  profilePhoto?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    altText?: string;
+    _type: "image";
+  };
+  socialMedia?: Array<{
+    name?: string;
+    link?: string;
+    text?: string;
+    icon?: IconPicker;
+    _type: "account";
+    _key: string;
+  }>;
+  tinkeringWith?: {
+    icon?: IconPicker;
+    tech?: Array<{
+      name?: string;
+      url?: string;
+      logo?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      enabled?: boolean;
+      _type: "technology";
+      _key: string;
+    }>;
+  };
+};
+
 export type GalleryPhoto = {
   _id: string;
   _type: "galleryPhoto";
@@ -42,6 +170,7 @@ export type HomePage = {
   _rev: string;
   headline?: string;
   slugline?: string;
+  bio?: string;
   gallery?: Array<{
     _ref: string;
     _type: "reference";
@@ -49,6 +178,13 @@ export type HomePage = {
     _key: string;
     [internalGroqTypeReferenceTo]?: "galleryPhoto";
   }>;
+};
+
+export type IconPicker = {
+  _type: "iconPicker";
+  provider?: string;
+  name?: string;
+  svg?: string;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -169,7 +305,24 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = GalleryPhoto | HomePage | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes =
+  | BlogPost
+  | AboutPage
+  | SiteSettings
+  | GalleryPhoto
+  | HomePage
+  | IconPicker
+  | SanityImagePaletteSwatch
+  | SanityImagePalette
+  | SanityImageDimensions
+  | SanityImageHotspot
+  | SanityImageCrop
+  | SanityFileAsset
+  | SanityImageAsset
+  | SanityImageMetadata
+  | Geopoint
+  | Slug
+  | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: sanity/sanity.queries.ts
 // Variable: homePageQuery
@@ -182,6 +335,7 @@ export type HomePageQueryResult = Array<{
   _rev: string;
   headline?: string;
   slugline?: string;
+  bio?: string;
   gallery: Array<{
     photo: {
       asset?: {
@@ -198,15 +352,157 @@ export type HomePageQueryResult = Array<{
     altText: string | null;
   }> | null;
 }>;
-// Variable: siteSettingsQuery
+// Variable: profilePhotoQuery
 // Query: *[_type == 'siteSettings']{  profilePhoto}
-export type SiteSettingsQueryResult = Array<never>;
+export type ProfilePhotoQueryResult = Array<{
+  profilePhoto: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    altText?: string;
+    _type: "image";
+  } | null;
+}>;
+// Variable: socialMediaQuery
+// Query: *[_type == 'siteSettings']{  socialMedia}
+export type SocialMediaQueryResult = Array<{
+  socialMedia: Array<{
+    name?: string;
+    link?: string;
+    text?: string;
+    icon?: IconPicker;
+    _type: "account";
+    _key: string;
+  }> | null;
+}>;
+// Variable: aboutPageQuery
+// Query: *[_type == 'aboutPage'][0]{  headline,  aboutPhoto,  content,  rulesForBuilding[enabled == true]{    title,    description,    icon,    enabled  }}
+export type AboutPageQueryResult = {
+  headline: string | null;
+  aboutPhoto: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    altText?: string;
+    _type: "image";
+  } | null;
+  content: string | null;
+  rulesForBuilding: Array<{
+    title: string | null;
+    description: string | null;
+    icon: IconPicker | null;
+    enabled: boolean | null;
+  }> | null;
+} | null;
+// Variable: blogPostsQuery
+// Query: *[_type == 'blogPost'] | order(publishedAt desc)[0...3]{  title,  slug,  publishedAt,  excerpt}
+export type BlogPostsQueryResult = Array<{
+  title: string | null;
+  slug: Slug | null;
+  publishedAt: string | null;
+  excerpt: string | null;
+}>;
+// Variable: allBlogPostsQuery
+// Query: *[_type == 'blogPost'] | order(publishedAt desc){  title,  slug,  publishedAt,  excerpt,  author}
+export type AllBlogPostsQueryResult = Array<{
+  title: string | null;
+  slug: Slug | null;
+  publishedAt: string | null;
+  excerpt: string | null;
+  author: string | null;
+}>;
+// Variable: blogPostBySlugQuery
+// Query: *[_type == 'blogPost' && slug.current == $slug][0]{  title,  slug,  publishedAt,  excerpt,  content,  author}
+export type BlogPostBySlugQueryResult = {
+  title: string | null;
+  slug: Slug | null;
+  publishedAt: string | null;
+  excerpt: string | null;
+  content: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+        _key: string;
+      }
+  > | null;
+  author: string | null;
+} | null;
+// Variable: siteSettingsQuery
+// Query: *[_type == 'siteSettings'][0]{  tinkeringWith}
+export type SiteSettingsQueryResult = {
+  tinkeringWith: {
+    icon?: IconPicker;
+    tech?: Array<{
+      name?: string;
+      url?: string;
+      logo?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      enabled?: boolean;
+      _type: "technology";
+      _key: string;
+    }>;
+  } | null;
+} | null;
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     "*[_type == 'homePage']{\n      ...,\n      gallery[] -> {\n        photo,\n        altText\n      }\n    }": HomePageQueryResult;
-    "*[_type == 'siteSettings']{\n  profilePhoto\n}": SiteSettingsQueryResult;
+    "*[_type == 'siteSettings']{\n  profilePhoto\n}": ProfilePhotoQueryResult;
+    "*[_type == 'siteSettings']{\n  socialMedia\n}": SocialMediaQueryResult;
+    "*[_type == 'aboutPage'][0]{\n  headline,\n  aboutPhoto,\n  content,\n  rulesForBuilding[enabled == true]{\n    title,\n    description,\n    icon,\n    enabled\n  }\n}": AboutPageQueryResult;
+    "*[_type == 'blogPost'] | order(publishedAt desc)[0...3]{\n  title,\n  slug,\n  publishedAt,\n  excerpt\n}": BlogPostsQueryResult;
+    "*[_type == 'blogPost'] | order(publishedAt desc){\n  title,\n  slug,\n  publishedAt,\n  excerpt,\n  author\n}": AllBlogPostsQueryResult;
+    "*[_type == 'blogPost' && slug.current == $slug][0]{\n  title,\n  slug,\n  publishedAt,\n  excerpt,\n  content,\n  author\n}": BlogPostBySlugQueryResult;
+    "*[_type == 'siteSettings'][0]{\n  tinkeringWith\n}": SiteSettingsQueryResult;
   }
 }

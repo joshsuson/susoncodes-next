@@ -16,6 +16,11 @@ export const homePageType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "bio",
+      type: "text",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
       name: "gallery",
       type: "array",
       of: [

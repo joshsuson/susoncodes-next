@@ -13,9 +13,15 @@ export const structure: StructureResolver = (S) =>
         .child(
           S.document().schemaType("siteSettings").documentId("siteSettings")
         ),
+      S.listItem()
+        .title("About Page")
+        .child(S.document().schemaType("aboutPage").documentId("aboutPage")),
       ...S.documentTypeListItems()
         .filter((listItem) => !["homePage"].includes(listItem.getId() || ""))
         .filter(
           (listItem) => !["siteSettings"].includes(listItem.getId() || "")
+        )
+        .filter(
+          (listItem) => !["aboutPage"].includes(listItem.getId() || "")
         ),
     ]);
