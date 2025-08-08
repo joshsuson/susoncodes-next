@@ -28,14 +28,16 @@ export const aboutPageQuery = defineQuery(`*[_type == 'aboutPage'][0]{
   }
 }`);
 
-export const blogPostsQuery = defineQuery(`*[_type == 'blogPost'] | order(publishedAt desc)[0...3]{
+export const blogPostsQuery =
+  defineQuery(`*[_type == 'blogPost'] | order(publishedAt desc)[0...3]{
   title,
   slug,
   publishedAt,
   excerpt
 }`);
 
-export const allBlogPostsQuery = defineQuery(`*[_type == 'blogPost'] | order(publishedAt desc){
+export const allBlogPostsQuery =
+  defineQuery(`*[_type == 'blogPost'] | order(publishedAt desc){
   title,
   slug,
   publishedAt,
@@ -43,7 +45,8 @@ export const allBlogPostsQuery = defineQuery(`*[_type == 'blogPost'] | order(pub
   author
 }`);
 
-export const blogPostBySlugQuery = defineQuery(`*[_type == 'blogPost' && slug.current == $slug][0]{
+export const blogPostBySlugQuery =
+  defineQuery(`*[_type == 'blogPost' && slug.current == $slug][0]{
   title,
   slug,
   publishedAt,
